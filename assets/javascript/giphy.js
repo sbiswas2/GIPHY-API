@@ -16,7 +16,7 @@ function displayTopicInfo() {
 	          // Retrieves the Rating Data
 	          $("#gifs").append("<p>Rating: " + response.data[i].rating + "</p>");
 	          // Retrieves the Image
-	          $("#gifs").append("<img src=" + response.data[i].images.fixed_height_still.url + ">");
+	          $("#gifs").append("<img src=" + response.data[i].images.fixed_height_still.url + " class='giphy'>");
 	          }
         });
 }
