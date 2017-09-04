@@ -2,19 +2,21 @@
 var topics = ["basketball", "football", "baseball", "soccer", "tennis", "golf"];
 
 function displayTopicInfo() {
+        $("#gifs").empty();
         var topic = $(this).attr("data-name");
 		var queryURL = 'https://api.giphy.com/v1/gifs/search?q=' + topic + '&api_key=dc6zaTOxFJmzC';
-
-		$("#gifs").empty();
         // Creates AJAX call for the specific movie button being clicked
         $.ajax({
           url: queryURL,
           method: "GET"
         }).done(function(response) {
-          console.log(response);
-          // Retrieves the Rating Data
-          $("#gifs").append("<p>Rating: " + response.data[0].rating + "</p>");
-          $("#gifs").append("<img src=" + response.data[0].images.fixed_height.url + ">");
+	          for (var i = 0; i < 10; i++) {          
+	          console.log(response);
+	          // Retrieves the Rating Data
+	          $("#gifs").append("<p>Rating: " + response.data[i].rating + "</p>");
+	          // Retrieves the Image
+	          $("#gifs").append("<img src=" + response.data[i].images.fixed_height.url + ">");
+	          }
         });
 
       }
