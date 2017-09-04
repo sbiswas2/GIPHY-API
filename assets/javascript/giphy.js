@@ -1,6 +1,7 @@
 // topics - create an array of strings
 var topics = ["basketball", "football", "baseball", "soccer", "tennis", "golf"];
 
+// giphy API function
 function displayTopicInfo() {
         $("#gifs").empty();
         var topic = $(this).attr("data-name");
@@ -15,13 +16,12 @@ function displayTopicInfo() {
 	          // Retrieves the Rating Data
 	          $("#gifs").append("<p>Rating: " + response.data[i].rating + "</p>");
 	          // Retrieves the Image
-	          $("#gifs").append("<img src=" + response.data[i].images.fixed_height.url + ">");
+	          $("#gifs").append("<img src=" + response.data[i].images.fixed_height_still.url + ">");
 	          }
         });
+}
 
-      }
-
-// use for loop to create buttons from the array of strings
+// create buttons from the array of strings
 function renderButtons() {
 	// Delete the content inside the buttons div prior to adding new topics to avoid repeat buttons
 	$("#buttons").empty();
@@ -39,7 +39,7 @@ function renderButtons() {
 	    }
 }
 
-// This function handles events where the add topic button is clicked
+// user input from form will be added to array, then a function that creates new button
 	  $("#add-topic").on("click", function(event) {
 	    event.preventDefault();
 	    // Write code to grab the text the user types into the input field
@@ -51,14 +51,13 @@ function renderButtons() {
 	  });
 
 // when a button is clicked, API should grab 10 static gifs - display image
-	// display rating of gif
-// Adding click event listeners to all elements with a class of "topic"
-     $(document).on("click", ".topic", displayTopicInfo);
+$(document).on("click", ".topic", displayTopicInfo);
 
 // Calling the renderButtons function to display the initial list of movies
 renderButtons();
+
 // when user clicks the gif, it will animate
 // when user clicks the gif again, it will stop
 
 
-// user input from form will be added to array, then a function that creates new button
+
