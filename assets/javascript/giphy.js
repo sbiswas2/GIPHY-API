@@ -2,10 +2,10 @@
 var topics = ["basketball", "football", "baseball", "soccer", "tennis", "golf"];
 
 function displayTopicInfo() {
-
         var topic = $(this).attr("data-name");
-		var queryURL = 'http://api.giphy.com/v1/gifs/search?q=' + topic + '&api_key=dc6zaTOxFJmzC';
+		var queryURL = 'https://api.giphy.com/v1/gifs/search?q=' + topic + '&api_key=dc6zaTOxFJmzC';
 
+		$("#gifs").empty();
         // Creates AJAX call for the specific movie button being clicked
         $.ajax({
           url: queryURL,
@@ -13,8 +13,8 @@ function displayTopicInfo() {
         }).done(function(response) {
           console.log(response);
           // Retrieves the Rating Data
-          $("#gifs").empty();
-          $("#gifs").append("<p>" + response.rating + "</p>");
+          $("#gifs").append("<p>Rating: " + response.data[0].rating + "</p>");
+          $("#gifs").append("<img src=" + response.data[0].images.fixed_height.url + ">");
         });
 
       }
