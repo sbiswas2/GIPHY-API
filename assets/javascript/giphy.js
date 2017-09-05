@@ -13,13 +13,41 @@ function displayTopicInfo() {
         }).done(function(response) {
 	          for (var i = 0; i < 10; i++) {          
 	          console.log(response);
-	          // Retrieves the Rating Data
-	          $("#gifs").append("<p>Rating: " + response.data[i].rating + "</p>");
-	          // Retrieves the Image
-	          $("#gifs").append("<img src=" + response.data[i].images.fixed_height_still.url + " class='giphy'>");
+	          // setting rating as a variable
+	          var rating = response.data[i].rating.toUpperCase();
+	          var r = $("<p>").text("Rating: " + rating);
+	          r.addClass("topicRating");
+	          
+	          // setting image as a variable & class to use in onclick function later
+	          var topicImage = $("<img>");
+	          topicImage.attr("src", response.data[i].images.fixed_height_still.url);
+	          topicImage.attr("data-still", response.data[i].images.fixed_height_still.url);
+	          topicImage.attr("data-animate", response.data[i].images.fixed_height.url);
+	          topicImage.attr("data-state", "still");
+	          topicImage.addClass("topicImage");
+
+	          // Displays the Rating Data
+	          $("#gifs").append(r);
+	          // Displays the Image
+	          $("#gifs").append(topicImage);
 	          }
         });
-}
+};
+
+// when user clicks the gif, it will animate
+// when user clicks the gif again, it will stop
+$(".topicImage").on("click", function() {
+	var state = $(this).attr("data-state");
+	console.log(state);
+	// if else statement based on data-state
+	if(state === "still") {
+		$(this).attr("src", $(this).data("animate"));
+		$(this).attr("data-state", "animate");
+	} else {
+		$(this).attr("src", $(this).data("still"));
+		$(this).attr("data-state", "still");
+	}
+});
 
 // create buttons from the array of strings
 function renderButtons() {
@@ -29,7 +57,7 @@ function renderButtons() {
 	    for (var i = 0; i < topics.length; i++) {
 	      var a = $("<button>");
           // Adds a class of movie to our button
-          a.addClass("topic");
+          a.addClass("topic btn-primary btn-lg");
           // Added a data-attribute
           a.attr("data-name", topics[i]);
           // Provided the initial button text
@@ -37,7 +65,7 @@ function renderButtons() {
 	      // Added the button to the buttons div
           $("#buttons").append(a);
 	    }
-}
+};
 
 // user input from form will be added to array, then a function that creates new button
 	  $("#add-topic").on("click", function(event) {
@@ -55,9 +83,4 @@ $(document).on("click", ".topic", displayTopicInfo);
 
 // Calling the renderButtons function to display the initial list of movies
 renderButtons();
-
-// when user clicks the gif, it will animate
-// when user clicks the gif again, it will stop
-
-
 
