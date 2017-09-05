@@ -3,7 +3,9 @@ var topics = ["basketball", "football", "baseball", "soccer", "tennis", "golf"];
 
 // giphy API function
 function displayTopicInfo() {
+        // clear gifs div to avoid repeat results
         $("#gifs").empty();
+
         var topic = $(this).attr("data-name");
 		var queryURL = 'https://api.giphy.com/v1/gifs/search?q=' + topic + '&api_key=dc6zaTOxFJmzC';
         // Creates AJAX call for the specific movie button being clicked
@@ -13,41 +15,34 @@ function displayTopicInfo() {
         }).done(function(response) {
 	          for (var i = 0; i < 10; i++) {          
 	          console.log(response);
+	          var currentGif = response.data[i];
+	          var result = $("<div class='renderedGif''>");
 	          // setting rating as a variable
-	          var rating = response.data[i].rating.toUpperCase();
-	          var r = $("<p>").text("Rating: " + rating);
-	          r.addClass("topicRating");
+	          var rating = (currentGif.rating).toUpperCase();
+	          result.append("<p> Rating: " + rating);
 	          
 	          // setting image as a variable & class to use in onclick function later
-	          var topicImage = $("<img>");
-	          topicImage.attr("src", response.data[i].images.fixed_height_still.url);
-	          topicImage.attr("data-still", response.data[i].images.fixed_height_still.url);
-	          topicImage.attr("data-animate", response.data[i].images.fixed_height.url);
-	          topicImage.attr("data-state", "still");
-	          topicImage.addClass("topicImage");
+	          var still = $("<img src='" + currentGif.images.original_still.url + "' width='300px' height='300px' name='" + currentGif.images.original.url + "' data-url='" + currentGif.images.original_still.url + "'>");
+	          still.addClass("img-rounded");
+	          result.append(still);
+	          $("#gifs").append(result);
+	          
+	          	// when user clicks the gif, it will animate
+				// when user clicks the gif again, it will stop
+		          var toggle = 0;
+		          still.on("click", function(event){
+		          	if (toggle === 0) {
+		          		$(this).attr("src", ($(this).attr("name")));
+		          		toggle = 1;
+		          	} else if (toggle === 1) {
+		          		$(this).attr("src", ($(this).attr("data-url")));
+		          		toggle = 0;
+		          	}
+		          })
 
-	          // Displays the Rating Data
-	          $("#gifs").append(r);
-	          // Displays the Image
-	          $("#gifs").append(topicImage);
 	          }
         });
 };
-
-// when user clicks the gif, it will animate
-// when user clicks the gif again, it will stop
-$(".topicImage").on("click", function() {
-	var state = $(this).attr("data-state");
-	console.log(state);
-	// if else statement based on data-state
-	if(state === "still") {
-		$(this).attr("src", $(this).data("animate"));
-		$(this).attr("data-state", "animate");
-	} else {
-		$(this).attr("src", $(this).data("still"));
-		$(this).attr("data-state", "still");
-	}
-});
 
 // create buttons from the array of strings
 function renderButtons() {
@@ -57,7 +52,7 @@ function renderButtons() {
 	    for (var i = 0; i < topics.length; i++) {
 	      var a = $("<button>");
           // Adds a class of movie to our button
-          a.addClass("topic btn-primary btn-lg");
+          a.addClass("topic btn-danger btn-lg");
           // Added a data-attribute
           a.attr("data-name", topics[i]);
           // Provided the initial button text
